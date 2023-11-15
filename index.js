@@ -20,6 +20,13 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
+app.get('/info', (request, response) => {
+    const date = new Date()
+    response.write(`<p>Phonebook has info for ${Person.length} people</p>`)
+    response.write(`${date}`)
+    response.send()
+})
+
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id).then(person => {
         if (person) {
@@ -28,7 +35,6 @@ app.get('/api/persons/:id', (request, response, next) => {
             response.status(404).end()
         }
     }).catch(error => {
-        console.log(error)
         next(error)
     })
 })
@@ -43,12 +49,7 @@ app.post('/api/persons', (request, response) => {
         response.status(400).json({
             error: 'number missing',
         })
-    } /* else if (persons.map(p => p.name).includes(body.name)) {
-        response.status(400).json({
-            error: 'name must be unique',
-        })
-    }*/ else {
-        // const id = Math.floor(Math.random() * 1000000)
+    } else {
         const person = new Person({
             name: body.name,
             number: body.number,
@@ -59,6 +60,19 @@ app.post('/api/persons', (request, response) => {
     }
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+    const person = {
+        name: body.name,
+        number: body.name,
+    }
+    Person.findByIdAndUpdate(request.params.id, person, { new: true }).then(updatedPerson => {
+        response.json(updatedPerson)
+    }).catch(error => {
+        next(error)
+    })
+})
+
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id).then(result => {
         response.status(204).end()
@@ -66,6 +80,16 @@ app.delete('/api/persons/:id', (request, response, next) => {
         next(error)
     })
 })
+
+const errorHandler = (error, request, response, next) => {
+    console.log(error)
+    if (error.name === 'CastError') {
+        response.status(400).send({error: 'malformatted id'})
+    }
+    next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
