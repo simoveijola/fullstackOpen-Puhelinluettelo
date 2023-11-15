@@ -37,13 +37,13 @@ let persons = [
   }
 ]
 
-/*
-app.get('/api/persons', (request, response) => {
-    Person.
-    response.json(persons)
-    response.send()
-})
 
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
+})
+/*
 app.get('/info', (request, response) => {
     const date = new Date()
     response.write(`<p>Phonebook has info for ${persons.length} people</p>`)
