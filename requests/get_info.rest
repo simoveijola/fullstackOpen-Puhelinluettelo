@@ -1,1 +1,1 @@
-GET https://the-phonebook-cgy0.onrender.com/api/info
+GET https://the-phonebook-cgy0.onrender.com/info
