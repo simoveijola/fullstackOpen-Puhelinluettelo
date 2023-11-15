@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -36,7 +37,9 @@ let persons = [
   }
 ]
 
+/*
 app.get('/api/persons', (request, response) => {
+    Person.
     response.json(persons)
     response.send()
 })
@@ -47,51 +50,50 @@ app.get('/info', (request, response) => {
     response.write(`${date}`)
     response.send()
 })
+*/
 
+/*
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 })
+*/
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id == id)
-    if (person) {
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 app.post('/api/persons', (request, response) => {
-    const person = request.body
-    //console.log(person)
-    if (!person.name) {
+    const body = request.body
+    if (!body.name) {
         response.status(400).json({
             error: 'name missing',
         })
-    } else if (!person.number) {
+    } else if (!body.number) {
         response.status(400).json({
             error: 'number missing',
         })
-    } else if (persons.map(p => p.name).includes(person.name)) {
+    } else if (persons.map(p => p.name).includes(body.name)) {
         response.status(400).json({
             error: 'name must be unique',
         })
     } else {
         const id = Math.floor(Math.random() * 1000000)
-        const newPerson = {
+        const person = new Person({
             id: id,
-            name: person.name,
-            number: person.number
-        }
-        persons = persons.concat(newPerson)
-        response.json(newPerson)
+            name: body.name,
+            number: body.number,
+
+        })
+        persons = persons.concat(person)
+        response.json(person)
     }
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
