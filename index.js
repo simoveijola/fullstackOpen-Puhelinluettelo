@@ -28,6 +28,7 @@ app.get('/api/persons/:id', (request, response) => {
             response.status(404).end()
         }
     }).catch(error => {
+        console.log(error)
         response.status(400).send({ error: "malformatted id" })
     })
 })
@@ -56,6 +57,14 @@ app.post('/api/persons', (request, response) => {
             response.json(savedPerson)
         })
     }
+})
+
+app.delete('api/persons/:id', (request, response, next) => {
+    Person.findByIdAndDelete(request.params.id).then(result => {
+        response.status(204).end()
+    }).catch(error => {
+        next(error)
+    })
 })
 
 const PORT = process.env.PORT
