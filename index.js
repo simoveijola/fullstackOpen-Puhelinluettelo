@@ -24,9 +24,9 @@ app.get('/info', (request, response) => {
     const date = new Date()
     Person.find({}).then(persons => {
         response.write(`<p>Phonebook has info for ${persons.length} people</p>`)
+        response.write(`${date}`)
+        response.send()
     })
-    response.write(`${date}`)
-    response.send()
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
