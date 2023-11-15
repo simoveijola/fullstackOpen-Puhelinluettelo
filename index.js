@@ -22,7 +22,9 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     const date = new Date()
-    response.write(`<p>Phonebook has info for ${Person.length} people</p>`)
+    Person.find({}).then(persons => {
+        response.write(`<p>Phonebook has info for ${persons.length} people</p>`)
+    })
     response.write(`${date}`)
     response.send()
 })
@@ -64,7 +66,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
     const person = {
         name: body.name,
-        number: body.name,
+        number: body.number,
     }
     Person.findByIdAndUpdate(request.params.id, person, { new: true }).then(updatedPerson => {
         response.json(updatedPerson)
