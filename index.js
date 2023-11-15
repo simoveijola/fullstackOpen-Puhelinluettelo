@@ -1,5 +1,4 @@
 require('dotenv').config()
-
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -38,7 +37,6 @@ let persons = [
   }
 ]
 
-
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
         response.json(persons)
@@ -51,16 +49,13 @@ app.get('/info', (request, response) => {
     response.write(`${date}`)
     response.send()
 })
-*/
 
-/*
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 })
 */
-
 app.get('/api/persons/:id', (request, response) => {
     Person.findById(request.params.id).then(person => {
         response.json(person)
