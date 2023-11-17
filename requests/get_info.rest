@@ -1,1 +1,2 @@
-GET https://the-phonebook-cgy0.onrender.com/info
+//GET https://the-phonebook-cgy0.onrender.com/info
+GET http://localhost:3001/info

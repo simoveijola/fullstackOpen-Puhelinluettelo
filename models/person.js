@@ -24,7 +24,7 @@ const personSchema = new mongoose.Schema({
         minLength: 8,
         validate: {
             validator: function (v) {
-                return /\d{2,3}-\d{1,}/.test(v)
+                return /\d{2,3}-\d{1,8}/.test(v)
             },
             message: "Incorrect number format. Accepted formats: xx-yyyyyy... and xxx-yyyyy..."
         },

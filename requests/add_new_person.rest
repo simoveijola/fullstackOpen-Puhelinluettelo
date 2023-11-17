@@ -1,6 +1,6 @@
-POST https://the-phonebook-cgy0.onrender.com/api/persons
+//POST https://the-phonebook-cgy0.onrender.com/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
-
 {
     "name": "Monni Meikäläinen",
     "number": "999-898989"
